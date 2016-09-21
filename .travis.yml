@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: MQnGvRHCW8viUJXqACdkhAO9ryDKt+GbmldGOrGxVnuEyLnF/ewGuW4uQfe3wPzemw5nA+kwTIiggRZ3tYLy0WWyttqI0Vsuw+NuD0RhbPhj05mvyNtZHspVguS/lfb0VAjSJW6XRtUbtMYDl3HTCdbHiQxuN/mk1XlV6jz3tlEk6WCxwZwEaNX6cLYpcO9Q+yLJAMHZvupKaxpYrwboOGznOvaimUlxdm+V4bywv5rOj7tRknzWTtJKJtHTrSOIv7O+vXfkh1xSPqTUmep9e4NnmSoRgCGS/0D6hGu0DpmH99F9XK4r7EYe6zWxzMxSvHKEJJfetufMMnSnl+CqHK88ivmyL41RFRcajK/g0klOrouyEQMLAJsAGXkb6EQwMkGz35cm3av6KEYFSeBka5Dsu84fWJNjAStef1FxwpNrwlDH3560T7twRYPOG+S//UafqK9e70EFTEvG2m3bWbeS96JULYJANZde1rBjiKXgOYk2w72nAsDdE3lQDhN4XF6SQ6pe3WA2L40zuu+blh9cALWt8WdTBgTgifRepMaHzamGzydL8orC8TgBqWZzjCZpz43OkIloBIdGNYpjvRC3rS3pVSkfm+8N5a0cI1bb1uCvXKTV8EzJP+vlNYQkup3cwTBZK/q2u6UTeKzL+YvkN9/JuJ14wN5pZMoqIck=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/The-Letters-of-Horace-Walpole-Earl-of-Orford-Volume-4_4919
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
