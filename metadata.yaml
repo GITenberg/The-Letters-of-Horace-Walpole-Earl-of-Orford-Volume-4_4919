@@ -1,5 +1,5 @@
 _repo: The-Letters-of-Horace-Walpole-Earl-of-Orford-Volume-4_4919
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -33,5 +33,6 @@ subjects:
 - !lcc 'DA'
 - !lcsh 'Authors, English -- 18th century -- Correspondence'
 - !lcsh 'Legislators -- Great Britain -- Correspondence'
+- GITenberg
 title: The Letters of Horace Walpole, Earl of Orford — Volume 4
 url: http://www.gutenberg.org/ebooks/4919
